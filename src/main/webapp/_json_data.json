@@ -1,0 +1,9 @@
+{ 
+	"data" : "北京电影院", 
+	"attr" : { "id" : "node_identificator", "some-other-attribute" : "attribute_value" ,"rel":"folder"}, 
+	"state" : "closed",
+	"children" : [{"data" : "西城电影院", 
+	"attr" : { "id" : "node_identificator_xd", "some-other-attribute" : "attribute_value","rel":"file"}, 
+	"state" : "open",
+	"children" : [ "电影院1","电影院2" ]},{"data" : "东城电影院","attr" : { "id" : "node_identificator2"}} ]
+}

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="com.selffun.suite.dao.ByurlMapper" >
+  <resultMap id="BaseResultMap" type="com.selffun.suite.pojo.Byurl" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="call_count" property="callCount" jdbcType="BIGINT" />
+    <result column="success_count" property="successCount" jdbcType="BIGINT" />
+    <result column="resp_sec_count" property="respSecCount" jdbcType="BIGINT" />
+    <result column="data_input" property="dataInput" jdbcType="BIGINT" />
+    <result column="data_output" property="dataOutput" jdbcType="BIGINT" />
+    <result column="max_resp" property="maxResp" jdbcType="INTEGER" />
+    <result column="max_resp_time" property="maxRespTime" jdbcType="TIME" />
+    <result column="max_resp_client" property="maxRespClient" jdbcType="VARCHAR" />
+    <result column="min_resp" property="minResp" jdbcType="INTEGER" />
+    <result column="cm_created_time" property="cmCreatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, `date`, url, call_count, success_count, resp_sec_count, data_input, data_output, 
+    max_resp, max_resp_time, max_resp_client, min_resp, cm_created_time
+  </sql>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.selffun.suite.pojo.ByurlExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from byurl
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleAndPage" resultMap="BaseResultMap" parameterType="com.selffun.suite.pojo.ByurlExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from byurl
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.selffun.suite.pojo.ByurlExample" >
+    delete from byurl
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <select id="countByExample" parameterType="com.selffun.suite.pojo.ByurlExample" resultType="java.lang.Integer" >
+    select count(*) from byurl
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update byurl
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.date != null" >
+        `date` = #{record.date,jdbcType=DATE},
+      </if>
+      <if test="record.url != null" >
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.callCount != null" >
+        call_count = #{record.callCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.successCount != null" >
+        success_count = #{record.successCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.respSecCount != null" >
+        resp_sec_count = #{record.respSecCount,jdbcType=BIGINT},
+      </if>
+      <if test="record.dataInput != null" >
+        data_input = #{record.dataInput,jdbcType=BIGINT},
+      </if>
+      <if test="record.dataOutput != null" >
+        data_output = #{record.dataOutput,jdbcType=BIGINT},
+      </if>
+      <if test="record.maxResp != null" >
+        max_resp = #{record.maxResp,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxRespTime != null" >
+        max_resp_time = #{record.maxRespTime,jdbcType=TIME},
+      </if>
+      <if test="record.maxRespClient != null" >
+        max_resp_client = #{record.maxRespClient,jdbcType=VARCHAR},
+      </if>
+      <if test="record.minResp != null" >
+        min_resp = #{record.minResp,jdbcType=INTEGER},
+      </if>
+      <if test="record.cmCreatedTime != null" >
+        cm_created_time = #{record.cmCreatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update byurl
+    set id = #{record.id,jdbcType=BIGINT},
+      `date` = #{record.date,jdbcType=DATE},
+      url = #{record.url,jdbcType=VARCHAR},
+      call_count = #{record.callCount,jdbcType=BIGINT},
+      success_count = #{record.successCount,jdbcType=BIGINT},
+      resp_sec_count = #{record.respSecCount,jdbcType=BIGINT},
+      data_input = #{record.dataInput,jdbcType=BIGINT},
+      data_output = #{record.dataOutput,jdbcType=BIGINT},
+      max_resp = #{record.maxResp,jdbcType=INTEGER},
+      max_resp_time = #{record.maxRespTime,jdbcType=TIME},
+      max_resp_client = #{record.maxRespClient,jdbcType=VARCHAR},
+      min_resp = #{record.minResp,jdbcType=INTEGER},
+      cm_created_time = #{record.cmCreatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from byurl
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from byurl
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.selffun.suite.pojo.Byurl" useGeneratedKeys="true" keyProperty="id" >
+    insert into byurl (`date`, url, call_count, 
+      success_count, resp_sec_count, data_input, 
+      data_output, max_resp, max_resp_time, 
+      max_resp_client, min_resp, cm_created_time
+      )
+    values (#{date,jdbcType=DATE}, #{url,jdbcType=VARCHAR}, #{callCount,jdbcType=BIGINT}, 
+      #{successCount,jdbcType=BIGINT}, #{respSecCount,jdbcType=BIGINT}, #{dataInput,jdbcType=BIGINT}, 
+      #{dataOutput,jdbcType=BIGINT}, #{maxResp,jdbcType=INTEGER}, #{maxRespTime,jdbcType=TIME}, 
+      #{maxRespClient,jdbcType=VARCHAR}, #{minResp,jdbcType=INTEGER}, #{cmCreatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.selffun.suite.pojo.Byurl" useGeneratedKeys="true" keyProperty="id" >
+    insert into byurl
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      `date`,
+      url,
+      call_count,
+      success_count,
+      resp_sec_count,
+      data_input,
+      data_output,
+      max_resp,
+      max_resp_time,
+      max_resp_client,
+      min_resp,
+      cm_created_time,
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{date,jdbcType=DATE},
+      #{url,jdbcType=VARCHAR},
+      #{callCount,jdbcType=BIGINT},
+      #{successCount,jdbcType=BIGINT},
+      #{respSecCount,jdbcType=BIGINT},
+      #{dataInput,jdbcType=BIGINT},
+      #{dataOutput,jdbcType=BIGINT},
+      #{maxResp,jdbcType=INTEGER},
+      #{maxRespTime,jdbcType=TIME},
+      #{maxRespClient,jdbcType=VARCHAR},
+      #{minResp,jdbcType=INTEGER},
+      #{cmCreatedTime,jdbcType=TIMESTAMP},
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.selffun.suite.pojo.Byurl" >
+    update byurl
+    <set >
+      <if test="date != null" >
+        `date` = #{date,jdbcType=DATE},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="callCount != null" >
+        call_count = #{callCount,jdbcType=BIGINT},
+      </if>
+      <if test="successCount != null" >
+        success_count = #{successCount,jdbcType=BIGINT},
+      </if>
+      <if test="respSecCount != null" >
+        resp_sec_count = #{respSecCount,jdbcType=BIGINT},
+      </if>
+      <if test="dataInput != null" >
+        data_input = #{dataInput,jdbcType=BIGINT},
+      </if>
+      <if test="dataOutput != null" >
+        data_output = #{dataOutput,jdbcType=BIGINT},
+      </if>
+      <if test="maxResp != null" >
+        max_resp = #{maxResp,jdbcType=INTEGER},
+      </if>
+      <if test="maxRespTime != null" >
+        max_resp_time = #{maxRespTime,jdbcType=TIME},
+      </if>
+      <if test="maxRespClient != null" >
+        max_resp_client = #{maxRespClient,jdbcType=VARCHAR},
+      </if>
+      <if test="minResp != null" >
+        min_resp = #{minResp,jdbcType=INTEGER},
+      </if>
+      <if test="cmCreatedTime != null" >
+        cm_created_time = #{cmCreatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.selffun.suite.pojo.Byurl" >
+    update byurl
+    set `date` = #{date,jdbcType=DATE},
+      url = #{url,jdbcType=VARCHAR},
+      call_count = #{callCount,jdbcType=BIGINT},
+      success_count = #{successCount,jdbcType=BIGINT},
+      resp_sec_count = #{respSecCount,jdbcType=BIGINT},
+      data_input = #{dataInput,jdbcType=BIGINT},
+      data_output = #{dataOutput,jdbcType=BIGINT},
+      max_resp = #{maxResp,jdbcType=INTEGER},
+      max_resp_time = #{maxRespTime,jdbcType=TIME},
+      max_resp_client = #{maxRespClient,jdbcType=VARCHAR},
+      min_resp = #{minResp,jdbcType=INTEGER},
+      cm_created_time = #{cmCreatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

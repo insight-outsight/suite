@@ -1,0 +1,395 @@
+<html>
+
+<head>
+<title>
+交互框架起始页
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="css/jstree/!style.css" />
+<link rel="stylesheet" href="css/jquery-themes/jquery-ui-1.10.3.custom.min.css" />
+
+<style type="text/css">
+
+#leftMenuTree {position:absolute;left:0px;top:20px;width:360px;/*background-color:#978972*/}
+.ui-menu { width: 150px; }
+#tabs {position:absolute;left:380px;top:20px;}
+
+</style>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.ui.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="js/jstree/jquery.jstree.js"></script>
+
+<script type="text/javascript" src="js/ichart.1.2.min.js"></script> 
+
+<script>
+$(function() {
+	$( "#tabs" ).tabs();
+});
+</script>
+</head>
+
+<body class="nosidebar">
+	<div id="leftMenuTree">
+	
+				<h2 id="demos">Demos</h2>
+				<div class="panel">
+		
+					<h3>你可以对树形菜单进行如下操作</h3>
+		
+					<div id="logDiv"></div>
+		
+					<div id="demoMenuButtonDiv" style="height: 30px; overflow: auto;">
+						<input id="add_folder" type="button" style="display: block; float: left;" value="添加树支" /> 
+						<input id="add_file" type="button" style="display: block; float: left;" value="添加叶子" /> 
+						<input id="rename" type="button" style="display: block; float: left;" value="重命名" /> 
+						<input id="remove" type="button" style="display: block; float: left;" value="删除" />
+					</div>
+		
+					<div id="demoJSTreeDiv" class="demo"></div>
+					<script>
+						var tm_options = {getTreeURL:'getTreeData.do',
+										  addTreeURL:'addTreeData.do',
+										  modifyTreeURL:'modifyTreeData.do',
+										  deleteTreeURL:'deleteTreeData.do',
+										  ajaxRequestOperator : {
+													"operation" : "get_children",
+													"initial" : 1
+												}};
+						startTreeMenu(tm_options);
+						function startTreeMenu(tm_options){
+		/* 					var getTreeURL = 'getTreeData.do';
+							var addTreeURL = 'addTreeData.do';
+							var modifyTreeURL = 'modifyTreeData.do';
+							var deleteTreeURL = 'deleteTreeData.do'; */
+							
+							var getTreeURL = tm_options.getTreeURL;
+							var addTreeURL = tm_options.addTreeURL;
+							var modifyTreeURL = tm_options.modifyTreeURL;;
+							var deleteTreeURL = tm_options.deleteTreeURL;
+		
+							var ajaxRequestOperator = tm_options.ajaxRequestOperator;
+		
+							$(function() {
+								$("#demoJSTreeDiv").jstree(
+									{
+										/*配置JSTree插件*/
+										"plugins" : [ "themes", "json_data","cookies",
+												"types", "ui", "crrm" ],
+										
+										/*配置JSTree JSON插件选项*/
+										"json_data" : {
+											"ajax" : {
+												"url" : getTreeURL,
+												// 用于填充AJAX 请求中`data`对象，function参数n代表当前选中JSTree节点的jQuery对象
+												"data" : function(n) {
+													var ajaxData = {
+														"id" : n.attr ? n.attr("id") : 1
+													};
+													return $.extend(ajaxRequestOperator,ajaxData);
+												},
+												"success" : function(data) {
+													$.extend(ajaxRequestOperator,{"initial" : 2});
+												}
+											}
+										},
+										
+										/*配置JSTree 节点类型插件选项*/
+			 							"types" : {
+											"valid_children" : [ "folder" ],
+											"types" : {
+												"root" : {
+													"icon" : {
+														"image" : "image/e32.png"
+													},
+													"valid_children" : ["default", "folder"],
+													"max_depth" : -2,
+													"max_children" : -2,
+													// 绑定事件函数，属性值可为 boolean或者function类型
+													"hover_node" : true,
+													"select_node" : function(data) {
+														$('#logDiv').append(data + "<br/>");return false;
+													},
+													"open_node" : true,
+													"close_node" : true,
+													"create_node" : true,
+													"delete_node" : true
+												},
+												"folder" : {
+													"icon" : {
+														"image" : "image/folder-closed.gif"
+													},
+													"valid_children" : ["file", "folder" ]
+												},
+												"file" : {
+													"icon" : {
+														"image" : "image/file.gif"
+													},
+													"valid_children" : "none"
+												},
+												"default" : {
+													"icon" : {
+														"image" : "image/file.gif"
+													},
+													"valid_children" : "none"
+												}
+											}
+										}, 
+										//"ui" : {
+											// this makes the node with ID node_4 selected onload
+											//"initially_select" : [ "1" ]
+										//},
+										//"core" : {
+										//	//"initially_open" : ["1"]
+										//},
+		
+										"themes" : {
+											"theme" : "classic",
+											"url" : "css/jstree/themes/classic/style.css",
+											"dots" : true,
+											"icons" : true
+										}
+		
+								})
+								.bind("select_node.jstree", function (e, data) { 
+									if(isLeafNode(data.rslt.obj.attr("rel"))){
+										performSelectNodeEvent(e,data.rslt.obj.attr("id"));
+									}
+								})
+								.bind("create.jstree", function(event, data) {
+											//console.log("悬而未决");		
+											$.post(addTreeURL, {
+												"oprn" : "create_node",
+												"id" : data.rslt.parent.attr("id"),
+												"pos" : data.rslt.position,
+												"title" : data.rslt.name,
+												"type" : data.rslt.obj.attr("rel")
+											}, function(r) {
+												if (r.status) {
+													$(data.rslt.obj).attr("id","node"+r.id);
+												} else {
+													$.jstree.rollback(data.rlbk);
+												}
+											});
+										})
+								.bind("remove.jstree", function(event, data) {
+									data.rslt.obj.each(function() {
+										$.ajax({
+											async : false,
+											type : 'POST',
+											url : deleteTreeURL,
+											data : {
+												"oprn" : "remove_node",
+												"id" : this.id
+											},
+											success : function(r) {
+		 										if (!r.status) {
+													//data.inst.refresh();
+													refreshTree(data.inst);
+												} 
+												
+											}
+										});
+									});
+								})
+								.bind("rename.jstree",function(event, data) {
+											$.post(modifyTreeURL, {
+												"oprn" : "rename_node",
+												"id" : data.rslt.obj.attr("id"),
+												"title" : data.rslt.new_name
+											}, function(r) {
+												if (!r.status) {
+													$.jstree.rollback(data.rlbk);
+												}
+											});
+										})
+								.bind("move_node.jstree",function(event, data) {
+									data.rslt.o.each(function(i) {
+												$.ajax({
+														async : false,
+														type : 'POST',
+														url : getTreeURL,
+														data : {
+															"operation" : "move_node",
+															"id" : $(this).attr("id").replace("node_",""),
+															"ref" : data.rslt.cr === -1 ? 1: data.rslt.np.attr("id").replace("node_",""),
+															"position" : data.rslt.cp
+																	+ i,
+															"title" : data.rslt.name,
+															"copy" : data.rslt.cy ? 1 : 0
+														},
+														success : function(r) {
+															if (!r.status) {
+																$.jstree.rollback(data.rlbk);
+															} else {
+																$(data.rslt.oc).attr("id","node_"+ r.id);
+																if (data.rslt.cy&& $(data.rslt.oc).children("UL").length) {
+																	data.inst.refresh(data.inst._get_parent(data.rslt.oc));
+																}
+															}
+															//$("#analyze").click();
+														}
+												});
+									});
+								});
+							});
+		
+							// Code for the menu buttons
+							$(function() {
+								$("#demoMenuButtonDiv input").click(
+										function() {
+											//console.log("//"+this.id);
+											var rel = this.id.toString().replace("add_", "");
+											console.log(rel);
+											switch (this.id) {
+											case "add_file":
+											case "add_folder":
+												$("#demoJSTreeDiv").jstree("create", null,
+														"last", {
+															"attr" : {
+																"rel" : rel
+															}
+														});
+												break;
+											default:
+												$("#demoJSTreeDiv").jstree(this.id);
+												break;
+											}
+										}
+								);
+							});			
+						}
+						
+						function refreshTree(jstreeInstance){
+							$.extend(tm_options.ajaxRequestOperator,{"initial" : 1});
+							jstreeInstance.refresh();
+						}
+						
+						function 遍历对象(o){
+							for(var property in o){
+								console.log("遍历对象："+property+"等于"+o[property]);
+							} 
+						}
+						
+						function isLeafNode(object){
+							return object == "file"?true:false;
+						}
+						
+						function performSelectNodeEvent(e,nodeId){
+							$('#logDiv').append("你点击了节点" + nodeId + "。事件类型:"+e.type+"<br/>");
+							doDraw(); 
+						}
+						
+						function doDraw(){
+							$(function(){
+								var pv=[],ip=[],t;
+								for(var i=0;i<61;i++){
+									t = Math.floor(Math.random()*(30+((i%12)*5)))+10;
+									pv.push(t);
+									t = Math.floor(t*0.5);
+									t = t-Math.floor((Math.random()*t)/2);
+									ip.push(t);
+								}
+								var data = [{
+									name : '营业收入',
+									value:pv,
+									color:'#0d8ecf',
+									line_width:2
+									},
+									{
+									name : '净利润',
+									value:ip,
+									color:'#ef7707',
+									line_width:2
+									}
+								];
+								var labels = ["2012-08-01","2012-08-02","2012-08-03","2012-08-04","2012-08-05","2012-08-06"];
+								var line = new iChart.LineBasic2D({
+									render : 'highTechFiscalDiv',
+									data: data,
+									align:'center',
+									title : '2008-2012全球各大科技公司财报',
+									subtitle : '(单位：亿美元)',
+									footnote : '数据来源：互联网',
+									width : 800,
+									height : 400,
+									tip:{
+										enable:true,
+										shadow:true
+									},
+									legend:{
+										enable : true,
+										row:1,//设置在一行上显示，与column配合使用
+										column : 'max',
+										valign:'top',
+										sign:'bar',
+										background_color:null,//设置透明背景
+										offsetx:-80,//设置x轴偏移，满足位置需要
+										border : true
+									},
+									crosshair:{
+										enable:true,
+										line_color:'#62bce9'
+									},
+									sub_option : {
+										label:false,
+										point_hollow : false
+									},
+									coordinate:{
+										width:640,
+										height:240,
+										axis:{
+											color:'#9f9f9f',
+											width:[0,0,2,2]
+										},
+										grids:{
+											vertical:{
+												way:'share_alike',
+												value:5
+											}
+										},
+										scale:[{
+											position:'left',
+											start_scale:0,
+											end_scale:100,
+											scale_space:10,
+											scale_size:2,
+											scale_color:'#9f9f9f'
+										},{
+											position:'bottom',
+											labels:labels
+										}]
+									}
+								});
+								//开始画图
+								line.draw();
+								});
+							}
+					</script>
+					
+				</div>
+	</div>
+
+	<div id="tabs">
+		<ul>
+		<li><a href="#tabs-1">设计</a></li>
+		<li><a href="#tabs-2">预览</a></li>
+		</ul>
+		<div id="tabs-1">
+		<h1>设计面板TAB页。。。。。。。。。。。。。。。。。。。</h1>
+		<hr/>
+		<div id="highTechFiscalDiv">
+		</div>
+		<hr/>
+		</div>
+		<div id="tabs-2">
+		<h1>预览面板TAB页。。。。。。。。。。。。。。。。。。。</h1>		
+		</div>
+	</div>
+	
+
+</body>
+
+</html>

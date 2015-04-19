@@ -1,0 +1,71 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>jsTree &raquo; Documentation &raquo; demo1</title>
+	<meta name="title" content="jsTree - jQuery tree plugin - Documentation" />
+	<meta name="ttw" content="8gy2z6g" />
+	<link rel="shortcut icon" href="/favicon.ico" />
+	
+	<link rel="stylesheet" type="text/css" href="css/jstree/!style.css" />
+	<style type="text/css">
+	</style>
+	
+	<script type="text/javascript" src="js/jquery.js"></script>	
+	<script type="text/javascript" src="js/jquery.cookie.js"></script>
+	<script type="text/javascript" src="js/jquery.hotkeys.js"></script>
+	<script type="text/javascript" src="js/jstree/jquery.jstree.js"></script>
+
+	</head>
+	
+	<body  class="nosidebar" >
+	
+	<div id="container">
+
+
+	<h2 id="demos">Demos</h2>
+	<div class="panel">
+
+
+	<h3>Using the ajax config option</h3>
+	<div id="demo3" class="demo"></div>
+	<script type="text/javascript" class="source">
+	$(function () {
+		$("#demo3").jstree({ 
+			"html_data" : {
+				"ajax" : {
+					"url" : "_html_data.html",
+					"data" : function (n) { 
+						return { id : n.attr ? n.attr("id") : 0 }; 
+					}
+				}
+			},
+			"plugins" : [ "themes", "html_data" ]
+		});
+	});
+	</script>
+
+	<h3>Using both the data &amp; ajax config options</h3>
+	<div id="demo4" class="demo"></div>
+	
+	<script type="text/javascript" class="source">
+	$(function () {
+		$("#demo4").jstree({ 
+			"core" : { "initially_open" : [ "root2" ] },
+			"html_data" : {
+				"data" : "<li class='jstree-closed' id='root2'><a href='#'>Root node</a></li>",
+				"ajax" : { "url" : "_html_data.html" }
+			},
+			"plugins" : [ "themes", "html_data" ]
+		});
+	});
+	</script>
+	</div>
+	</div>
+
+
+	</body>
+</html>
+

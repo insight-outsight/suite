@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 这里namespace必须是接口的路径，不然运行时会报错 “is not known to the MapperRegistry” -->
+<mapper namespace="com.selffun.suite.dao.ITestMapper">
+
+	<!-- 这里的id必须和接口中的方法名相同，不然运行时会报错  传递了一个Map作为参数-->
+	<select id="getTreeData" resultType="TreeInfo" parameterType="Map" useCache="false">
+		select id,node_id,parent_id,title,positon,type from tree_info where parent_id=#{id}
+	</select>
+	<!-- 初始化树2 -->
+	<select id="initialTreeData" resultType="TreeInfo" parameterType="Map" useCache="false">
+		select id,node_id,parent_id,title,positon,type from tree_info where node_id=#{id}
+	</select>
+	<!-- 增加树的节点 -->
+	<insert id="addTreeData" parameterType="Map">
+		insert tree_info(node_id,parent_id,title,positon,type)values(#{node_id},#{parent_id},#{title},#{positon},#{type})
+	</insert>
+	<!-- 修改树的节点 -->
+	<update id="modifyTreeData" parameterType="Map">
+		update tree_info 
+		set title = #{title}
+		where node_id = #{node_id}
+	</update>
+	<!-- 删除树的节点 -->
+	<delete id="deleteTreeData" parameterType="Map">	 
+ 		delete from tree_info WHERE node_id = #{node_id} 
+   </delete>
+   <!-- 更新所有position字段值 -->
+	<update id="updateTreeDataOfPosition" parameterType="Map">
+		update tree_info 
+		set positon = #{positon}
+		where node_id = #{node_id}
+	</update>
+	<!-- 查询满足list记录 -->
+	<select id="findTreeDataByNodeID" resultType="TreeInfo" parameterType="Map" useCache="false">
+		select id,node_id,parent_id,title,positon,type from tree_info where node_id=#{node_id}
+	</select>
+	<select id="findTreeDataByParentID" resultType="TreeInfo" parameterType="Map" useCache="false">
+		select id,node_id,parent_id,title,positon,type from tree_info where parent_id=#{parent_id}
+	</select>
+</mapper>
