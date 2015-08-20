@@ -347,7 +347,19 @@
 					</webResources>-->
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
 					<webappDirectory>${package.dir}/${package.name}</webappDirectory>
-					<!--  <warName>blah</warName> 未测试这个标签-->
+					<!--  未测试以下标签
+					<warName>blah</warName> 
+					<finalName>${project.build.finalName}</finalName> 
+					<packagingExcludes>**/spy.properties,scripts/ext4/docs/**,logs/**</packagingExcludes>
+					<warSourceExcludes>scripts/ext4/docs/**,logs/**</warSourceExcludes>  
+					<workDirectory>${project.build.directory}/work</workDirectory>  
+					<useCache>false</useCache>  
+					<archive>  
+     						<addMavenDescriptor>true</addMavenDescriptor>  
+					</archive>  
+					<webXml>${basedir}/WebContent/WEB-INF/web.xml</webXml>  
+					<ignoreWebxml>false</ignoreWebxml>
+					-->
 				</configuration>
 			</plugin>
 			<plugin>
