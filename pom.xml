@@ -325,16 +325,16 @@
 				<configuration>
 					<!-- 拷贝资源文件时防止乱码 -->
 					<resourceEncoding>${build.resourceEncoding}</resourceEncoding>
-<!-- 					<webResources>
+<!-- 				<webResources>
 						<resource>
-							<!-- 相对于pom.xml文件的路径 
+							相对于pom.xml文件的路径 
 							<directory>src/main/resources/</directory>
 							<excludes>
                 						<exclude>**/*.*</exclude>
-              						</excludes>
-              						<!-- 是否过滤并替换文件中的占位符，也就是是否启动auto-config的功能，对于二进制文件一般false
+              				</excludes>
+              				是否过滤并替换文件中的占位符，也就是是否启动auto-config的功能，对于二进制文件一般false
 							<filtering>true</filtering>
-							<!-- 目标路径
+							目标路径
 							<targetPath>WEB-INF/classes/f</targetPath>
 						</resource>
 							||开始，这个片段意为对src/main/webapp/WEB-INF的web.xml执行过滤，即替换${}内容
