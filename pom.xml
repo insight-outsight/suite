@@ -248,6 +248,8 @@
 		<filters>
 			<filter>${env.properties.file}</filter>
 		</filters>
+		<!--  在maven default生命周期，process-resources阶段执
+		行maven-resources-plugin插件的resources目标处理主资源目下的资源文件   -->
 		<resources>
 			<resource>
 				<!-- Specifies the directory structure to place the set of resources from a build. 
@@ -288,10 +290,51 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			 <!-- Ignore/Execute plugin execution 
+			<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								copy-dependency plugin
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-dependency-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+			</plugin>
+			 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.4</version>
+				<!-- 
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.artifactId}/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+				 -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -300,6 +343,40 @@
 				<configuration>
 					<encoding>${build.resourceEncoding}</encoding>
 				</configuration>
+				<!-- 
+	            <executions>
+                   <execution>
+                           <id>copy-resources</id>
+                           <phase>package</phase>
+                           <goals>
+                                   <goal>copy-resources</goal>
+                           </goals>
+                           <configuration>
+                                   <encoding>UTF-8</encoding>
+                                    <outputDirectory>${app.package.directory}/${project.artifactId}/</outputDirectory>
+                                   <resources>
+                                            <resource> <directory>.</directory> <includes> <include>conf/**</include> 
+                                                     <include>META-INF/**</include> </includes> <filtering>true</filtering> </resource>
+                                            <resource>
+                                                     <directory>src/main/resources</directory>
+                                                     <filtering>true</filtering>
+                                                     <excludes>
+                                                              <exclude>**/*</exclude>
+                                                     </excludes>
+                                            </resource>
+                                            <resource>
+                                                     <directory>./bin/</directory>
+                                                     <includes>
+                                                              <include>startup.sh</include>
+                                                              <include>service.sh</include>
+                                                     </includes>
+                                                     <filtering>true</filtering>
+                                            </resource>
+                                   </resources>
+                           </configuration>
+                    </execution>
+	              </executions>
+	              -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
